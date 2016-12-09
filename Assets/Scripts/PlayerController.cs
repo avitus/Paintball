@@ -26,6 +26,16 @@ public class PlayerController : NetworkBehaviour
 		}
 	}
 
+	void FixedUpdate() {
+		StabilizePlayer ();
+	}
+
+	// Rotate player back towards vertical
+	void StabilizePlayer() {
+		Debug.Log ("X rotation: " + transform.eulerAngles.x + " Y rotation: " + transform.eulerAngles.y + " Z rotation: " + transform.eulerAngles.z);
+		transform.Rotate(-transform.eulerAngles.x * 0.9f, 0, -transform.eulerAngles.z * 0.9f);	
+	}
+
 	public override void OnStartLocalPlayer()
 	{
 		GetComponent<MeshRenderer>().material.color = Color.blue;
