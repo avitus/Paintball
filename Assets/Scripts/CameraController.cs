@@ -21,9 +21,9 @@ public class CameraController : MonoBehaviour {
 	// The target we are following
 	public Transform target;
 	// The distance in the x-z plane to the target
-	public float distance = 8.0f;
+	public float distance = 6.0f;
 	// the height we want the camera to be above the target
-	public float height = 5.0f;
+	public float height = 4.0f;
 	// How much we 
 	public float heightDamping = 2.0f;
 	public float rotationDamping = 10.0f;  // higher number = more responsive

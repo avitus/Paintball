@@ -14,11 +14,12 @@ public class PlayerController : NetworkBehaviour
 			return;
 		}
 			
-		var x = Input.GetAxis("Horizontal") * Time.deltaTime * 150.0f;
-		var z = Input.GetAxis("Vertical") * Time.deltaTime * 9.0f;
+		var x = Input.GetAxis("Horizontal") * Time.deltaTime * 150.0f; // rotate
+		var z = Input.GetAxis("Vertical") * Time.deltaTime * 15.0f;    // backwards-forwards
+		var s = Input.GetAxis ("Strafe") * Time.deltaTime * 15.0f;     // strafe left-right
 
 		transform.Rotate(0, x, 0);
-		transform.Translate(0, 0, z);
+		transform.Translate(s, 0, z);
 
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
@@ -32,8 +33,13 @@ public class PlayerController : NetworkBehaviour
 
 	// Rotate player back towards vertical
 	void StabilizePlayer() {
-		Debug.Log ("X rotation: " + transform.eulerAngles.x + " Y rotation: " + transform.eulerAngles.y + " Z rotation: " + transform.eulerAngles.z);
-		transform.Rotate(-transform.eulerAngles.x * 0.9f, 0, -transform.eulerAngles.z * 0.9f);	
+		Debug.Log ("X rotation: " + transform.eulerAngles.x.ToString ("0.##") + " Y rotation: " + transform.eulerAngles.y.ToString ("0.##") + " Z rotation: " + transform.eulerAngles.z.ToString ("0.##"));
+
+		// We want to rotate back up to vertical
+		Vector3 newEulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+
+		float speed = 0.2F;
+		transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(newEulerAngles), Time.time * speed);
 	}
 
 	public override void OnStartLocalPlayer()
@@ -52,7 +58,7 @@ public class PlayerController : NetworkBehaviour
 			bulletSpawn.rotation);
 
 		// Add velocity to the bullet
-		bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 15;
+		bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 25;
 
 		// Spawn the bullet on the Clients
 		NetworkServer.Spawn(bullet);
